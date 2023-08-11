@@ -1,4 +1,24 @@
 deployments:
+  environmentMapping:
+    development:
+      - "dev*"
+      - "Entwicklung"
+      - "desenvolvimento"
+      - "дев"
+    testing:
+      - "testes"
+      - "Test"
+      - "TST-*"
+      - "тест"
+    staging:
+      - "Pre-Prod"
+      - "STG-*"
+      - "staging"
+    production:
+      - "Produktion"
+      - "produção"
+      - "продакшн"
+      - "PROD-*"
   services:
     ids:
     - b:YXJpOmNsb3VkOmdyYXBoOjpzZXJ2aWNlL2UwYmIyNGViLTA2ZWEtNDAwZC1hYmI5LTI4ZTAxZmFmYWU1Mi9mMDc2YTRiMi0zODUwLTExZWUtOTg1NS0wYWJlM2Y0YTY2MDE=

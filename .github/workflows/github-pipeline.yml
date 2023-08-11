@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: 签出代码
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-        uses: actions/checkout@v2
+        # uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
   
@@ -39,4 +39,7 @@ jobs:
       name: 部署到生产环境
       runs-on: ubuntu-latest
       environment: production
+      services:
+        ids:
+        - b:YXJpOmNsb3VkOmdyYXBoOjpzZXJ2aWNlL2UwYmIyNGViLTA2ZWEtNDAwZC1hYmI5LTI4ZTAxZmFmYWU1Mi9mMDc2YTRiMi0zODUwLTExZWUtOTg1NS0wYWJlM2Y0YTY2MDE=
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}

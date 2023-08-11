@@ -21,6 +21,14 @@ jobs:
     # The type of runner that the job will run on
     name: 持续构建
     runs-on: ubuntu-latest
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: 签出代码
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
   
   deployment_job:
       # Purpose of this job is to Install App to a Prod instance. This should only 
@@ -31,7 +39,18 @@ jobs:
       name: 部署到生产环境
       runs-on: ubuntu-latest
       environment: production
+      
       services:
         ids:
         - b:YXJpOmNsb3VkOmdyYXBoOjpzZXJ2aWNlL2UwYmIyNGViLTA2ZWEtNDAwZC1hYmI5LTI4ZTAxZmFmYWU1Mi9mMDc2YTRiMi0zODUwLTExZWUtOTg1NS0wYWJlM2Y0YTY2MDE=
+      
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      
+      steps:
+      - name: 下载构建制品（Artifacts）
+        uses: actions/download-artifact@v2.0.10
+        # with:
+          # Artifact name # optional
+          # name: 
+          # 制品路径 Artifact artifact was downloaded to /home/runner/download/path/artifact
+          # path: '~/download/path'

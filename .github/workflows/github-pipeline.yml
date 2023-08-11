@@ -1,4 +1,4 @@
-name: Build and Deploy Text File
+name: Deployment
 
 on:
   push:
@@ -6,27 +6,9 @@ on:
       - main
 
 jobs:
-  build_and_deploy:
+  deployment:
     runs-on: ubuntu-latest
-
+    environment: production
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Lint the text file
-        run: |
-          # Add linting command for your text file here
-
-      - name: Deploy to staging
-        env:
-          ENVIRONMENT: staging
-        run: |
-          echo "Deploying to staging..."
-          # Add your deployment commands for staging environment here
-
-      - name: Deploy to production
-        env:
-          ENVIRONMENT: production
-        run: |
-          echo "Deploying to production..."
-          # Add your deployment commands for production environment here
+      - name: deploy
+        # ...deployment-specific steps

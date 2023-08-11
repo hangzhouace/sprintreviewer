@@ -1,107 +1,38 @@
-# This is a basic workflow to help you get started with Actions
+name: Build and Deploy
 
-name: BMI计算器CI/CD流水线
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches:
-      - master
-    paths: # 特定代码目录触发自动化流水线
-      - 'src/**'
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths: 
-      - 'src/**'
-      
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+      - main
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build_job:
-    # The type of runner that the job will run on
-    name: 持续构建
+  build_and_deploy:
     runs-on: ubuntu-latest
-  
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: 签出代码
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      
-      - name: 设置JDK环境配置
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-          cache: maven
-      
-      - name: 缓存SonarCloud包
-        uses: actions/cache@v1
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-          
-      - name: 缓存Maven包
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-          
-      - name: Sonar扫描、单元测试与打包
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn clean install -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=craigyoung2016_pluto
-        
-      - name: 上传构建制品（Artifacts）
-        uses: actions/upload-artifact@v2.2.4
-        with:
-          # 制品输出路径
-          path: './*'
-          retention-days: 5
 
-  deployment_job:
-    # Purpose of this job is to Install App to a Prod instance. This should only 
-    # trigger if the feature branch has been merged to master after a successfully 
-    # completed pull request, hence the conditional for push to master. In other words,
-    # the first two jobs run on CI, then all three jobs run on CD. 
-    needs: build_job
-    name: 部署到生产环境
-    runs-on: ubuntu-latest
-    environment: production
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     steps:
-      - name: 下载构建制品（Artifacts）
-        uses: actions/download-artifact@v2.0.10
-        # with:
-          # Artifact name # optional
-          # name: 
-          # 制品路径 Artifact artifact was downloaded to /home/runner/download/path/artifact
-          # path: '~/download/path'
-            
-      - name: '自动化部署到阿里云服务器，并重启服务'
-        # You may pin to the exact commit or the version.
-        uses: marcodallasanta/ssh-scp-deploy@v1.1.0
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          # Local file path
-          local: './artifact/target/*.jar'
-          # Remote file path
-          remote: '~/yyzone/'
-          # Remote server address
-          host: ${{ secrets.ALIYUN_HOST }}
-          # Remote server user
-          user: ${{ secrets.ALIYUN_USER }}
-          # Remote server private key
-          key: ${{ secrets.ALICLOUD_PRIVATE_KEY }}
-          # Command to run via ssh after scp upload
-          post_upload: cd /home/dxy/yyzone/deploy && ./deploy.sh ../bmicalculator-0.0.1-SNAPSHOT.jar
-          # ssh_options: -o StrictHostKeyChecking=no -o UserKnownHostsFile=~/.ssh/known_hosts
-          scp_options: -v
+          python-version: 3.8
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build and deploy to staging
+        env:
+          ENVIRONMENT: staging
+        run: |
+          echo "Building and deploying to staging..."
+          # Add your build and deployment commands for staging environment here
+
+      - name: Build and deploy to production
+        env:
+          ENVIRONMENT: production
+        run: |
+          echo "Building and deploying to production..."
+          # Add your build and deployment commands for production environment here

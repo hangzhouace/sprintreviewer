@@ -22,10 +22,6 @@ jobs:
     name: 持续构建
     runs-on: ubuntu-latest
   
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: 签出代码
-  
   deployment_job:
       # Purpose of this job is to Install App to a Prod instance. This should only 
       # trigger if the feature branch has been merged to master after a successfully 

@@ -27,9 +27,6 @@ jobs:
       - name: Deploy to production
         env:
           ENVIRONMENT: production
-          services:
-            ids:
-            - b:YXJpOmNsb3VkOmdyYXBoOjpzZXJ2aWNlL2UwYmIyNGViLTA2ZWEtNDAwZC1hYmI5LTI4ZTAxZmFmYWU1Mi9mMDc2YTRiMi0zODUwLTExZWUtOTg1NS0wYWJlM2Y0YTY2MDE=
         run: |
           echo "Deploying to production..."
           # Add your deployment commands for production environment here

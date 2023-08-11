@@ -12,3 +12,6 @@ jobs:
     steps:
       - name: deploy
         # ...deployment-specific steps
+        run: |
+          echo "Deploying to production..."
+          # Add your deployment commands for production environment here

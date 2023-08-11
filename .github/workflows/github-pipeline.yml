@@ -25,10 +25,6 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: 签出代码
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-        # uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
   
   deployment_job:
       # Purpose of this job is to Install App to a Prod instance. This should only 
